@@ -1,138 +1,109 @@
+
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
-const links = [
-    { href: "/#how-it-works", label: "How it works" },
-    { href: "/about", label: "About" },
-];
+const links = ["How its works", "About us", "Contact"];
 
 export function Navbar() {
     const [open, setOpen] = useState(false);
 
-    const closeMenu = () => setOpen(false);
-
     return (
-        <header className="sticky top-0 z-50 border-b border-line/20 bg-chalk/95 backdrop-blur">
-            <div className="mx-auto flex max-w-content items-center justify-between px-6 py-4">
-                {/* Logo */}
-                <Link
-                    href="/"
-                    onClick={closeMenu}
-                    aria-label="Loopcrew home"
-                    className="flex items-center"
-                >
-                    <Image
-                        src="/loop.png"
-                        alt="Loopcrew"
-                        width={24}
-                        height={24}
-                        priority
-                    />
-                </Link>
+        <nav className="relative flex items-center justify-between px-6 py-3 sm:px-8 md:px-10">
+            {/* Logo */}
+            <div className="transition-transform duration-300 hover:scale-[1.03]">
+                <Image
+                    src="/loop.png"
+                    alt="Logo"
+                    width={150}
+                    height={50}
+                    priority
+                />
+            </div>
 
-                {/* Desktop navigation */}
-                <nav
-                    className="hidden items-center gap-8 md:flex"
-                    aria-label="Main navigation"
-                >
-                    {links.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className="font-body text-sm text-ink/70 transition-colors hover:text-ink"
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </nav>
-
-                {/* Desktop actions */}
-                <div className="hidden items-center gap-3 md:flex">
-                    <Link
-                        href="/login"
-                        className="font-body text-sm font-medium text-ink/80 transition-colors hover:text-ink"
+            {/* Desktop Navigation */}
+            <div className="hidden gap-12 md:flex">
+                {links.map((link) => (
+                    <h1
+                        key={link}
+                        className="cursor-pointer text-black transition-all duration-200 hover:-translate-y-0.5 hover:underline hover:underline-offset-4"
                     >
-                        Log in
-                    </Link>
+                        {link}
+                    </h1>
+                ))}
+            </div>
 
-                    <Link
-                        href="/signup"
-                        className="rounded-sm bg-ember px-4 py-2 font-body text-sm font-medium text-chalk transition-colors hover:bg-ember-dim"
-                    >
-                        Sign up
-                    </Link>
-                </div>
+            {/* Desktop Buttons */}
+            <div className="hidden gap-5 md:flex">
+                <button className="cursor-pointer rounded-2xl px-3 py-1 text-black transition-all duration-200 hover:scale-105 hover:border hover:border-zinc-200">
+                    Log In
+                </button>
 
-                {/* Mobile menu button */}
-                <button
-                    type="button"
-                    className="flex flex-col gap-1.5 p-2 md:hidden"
-                    onClick={() => setOpen((prev) => !prev)}
-                    aria-label={open ? "Close menu" : "Open menu"}
-                    aria-expanded={open}
-                    aria-controls="mobile-navigation"
-                >
-                    <span
-                        className={`h-0.5 w-6 bg-ink transition-transform duration-200 ${open ? "translate-y-2 rotate-45" : ""
-                            }`}
-                    />
-
-                    <span
-                        className={`h-0.5 w-6 bg-ink transition-opacity duration-200 ${open ? "opacity-0" : "opacity-100"
-                            }`}
-                    />
-
-                    <span
-                        className={`h-0.5 w-6 bg-ink transition-transform duration-200 ${open ? "-translate-y-2 -rotate-45" : ""
-                            }`}
-                    />
+                <button className="cursor-pointer rounded-2xl px-3 py-1 text-black transition-all duration-200 hover:scale-105 hover:border hover:border-zinc-200">
+                    Sign Up
                 </button>
             </div>
 
-            {/* Mobile navigation */}
-            {open && (
-                <div
-                    id="mobile-navigation"
-                    className="border-t border-line/20 px-6 py-4 md:hidden"
+            {/* Mobile Menu Button */}
+            <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className="text-black transition-transform duration-200 active:scale-90 md:hidden"
+                aria-label="Toggle menu"
+                aria-expanded={open}
+            >
+                <span
+                    className={`block transition-all duration-300 ${open ? "rotate-90" : "rotate-0"
+                        }`}
                 >
-                    <nav
-                        className="flex flex-col gap-4"
-                        aria-label="Mobile navigation"
-                    >
-                        {links.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={closeMenu}
-                                className="font-body text-sm text-ink/70 transition-colors hover:text-ink"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                    {open ? <X size={28} /> : <Menu size={28} />}
+                </span>
+            </button>
 
-                        <div className="mt-2 flex flex-col gap-3 border-t border-line/20 pt-4">
-                            <Link
-                                href="/login"
-                                onClick={closeMenu}
-                                className="font-body text-sm font-medium text-ink/80 transition-colors hover:text-ink"
-                            >
-                                Log in
-                            </Link>
-
-                            <Link
-                                href="/signup"
-                                onClick={closeMenu}
-                                className="w-fit rounded-sm bg-ember px-4 py-2 font-body text-sm font-medium text-chalk transition-colors hover:bg-ember-dim"
-                            >
-                                Sign up
-                            </Link>
+            {/* Mobile Menu */}
+            <div
+                className={`absolute left-0 top-full z-50 w-full overflow-hidden border-t border-zinc-100 bg-white transition-all duration-300 ease-in-out md:hidden ${open
+                        ? "max-h-96 translate-y-0 opacity-100"
+                        : "pointer-events-none max-h-0 -translate-y-2 opacity-0"
+                    }`}
+            >
+                <div className="flex flex-col gap-5 px-6 py-6 sm:px-8">
+                    {/* Mobile Links */}
+                    {links.map((link, index) => (
+                        <div
+                            key={link}
+                            onClick={() => setOpen(false)}
+                            className="cursor-pointer text-black transition-all duration-300 hover:translate-x-1 hover:underline hover:underline-offset-4"
+                            style={{
+                                transitionDelay: open
+                                    ? `${index * 70}ms`
+                                    : "0ms",
+                            }}
+                        >
+                            {link}
                         </div>
-                    </nav>
+                    ))}
+
+                    {/* Mobile Buttons */}
+                    <div
+                        className="flex gap-5 pt-2 transition-all duration-300"
+                        style={{
+                            transitionDelay: open ? "210ms" : "0ms",
+                        }}
+                    >
+                        <button className="cursor-pointer rounded-2xl px-3 py-1 text-black transition-all duration-200 hover:scale-105 hover:border hover:border-zinc-200">
+                            Log In
+                        </button>
+
+                        <button className="cursor-pointer rounded-2xl px-3 py-1 text-black transition-all duration-200 hover:scale-105 hover:border hover:border-zinc-200">
+                            Sign Up
+                        </button>
+                    </div>
                 </div>
-            )}
-        </header>
+            </div>
+        </nav>
     );
 }
+
